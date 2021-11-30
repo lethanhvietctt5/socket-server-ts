@@ -1,6 +1,10 @@
 import * as http from "http";
 import * as socketio from "socket.io";
 import expressApp from "./app";
+import mongoose from "mongoose";
+
+const uri: string =
+  "mongodb+srv://lethanhviet:22102000@cluster0.qrnr2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 class SocketServer {
   private port: string | number;
@@ -13,15 +17,24 @@ class SocketServer {
     this.io = new socketio.Server(this.server);
   }
 
-  public listen(): void {
-    this.server.listen(this.port, () => {
-      console.log(`Server listening on port http://localhost:${this.port}`);
-    });
+  public listen = () => {
+    mongoose
+      .connect(uri)
+      .then(() => {
+        console.log("Connected to MongoDB");
 
-    this.io.on("connection", (...params) => {
-      console.log(params);
-    });
-  }
+        this.server.listen(this.port, () => {
+          console.log(`Server listening on port http://localhost:${this.port}`);
+        });
+
+        this.io.on("connection", (...params) => {
+          console.log(params);
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 }
 
 const socketServer = new SocketServer();
