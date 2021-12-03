@@ -3,7 +3,8 @@ import * as socketio from "socket.io";
 import expressApp from "./app";
 import mongoose from "mongoose";
 import UserModel from "./models/user";
-import UserDA from "./DA/userDA";
+import { UserDA } from "./DA/userDA";
+import { IUser } from "./types/user";
 
 const userDA = new UserDA();
 
@@ -35,9 +36,9 @@ class SocketServer {
           console.log(params);
         });
 
-        userDA.getUser("lethanhviet7c@gmail.com").then((user) => {
-          console.log(user);
-        });
+        // userDA.getUserByEmail("lethanhviet7c@gmail.com").then((user) => {
+        //   console.log(user);
+        // });
       })
       .catch((err) => {
         console.log(err);
