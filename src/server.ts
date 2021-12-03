@@ -2,6 +2,10 @@ import * as http from "http";
 import * as socketio from "socket.io";
 import expressApp from "./app";
 import mongoose from "mongoose";
+import UserModel from "./models/user";
+import UserDA from "./DA/userDA";
+
+const userDA = new UserDA();
 
 const uri: string =
   "mongodb+srv://lethanhviet:22102000@cluster0.qrnr2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
@@ -20,7 +24,7 @@ class SocketServer {
   public listen = () => {
     mongoose
       .connect(uri)
-      .then(() => {
+      .then(async () => {
         console.log("Connected to MongoDB");
 
         this.server.listen(this.port, () => {
@@ -29,6 +33,10 @@ class SocketServer {
 
         this.io.on("connection", (...params) => {
           console.log(params);
+        });
+
+        userDA.getUser("lethanhviet7c@gmail.com").then((user) => {
+          console.log(user);
         });
       })
       .catch((err) => {

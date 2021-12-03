@@ -8,11 +8,13 @@
   "scripts": {
     "start": "node build/index.js",
     "build": "tsc",
-    "dev": "nodemon build/index.js"
+    "dev": "nodemon build/index.js",
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.2.0",
     "mongoose": "^6.0.14",
     "socket.io": "^4.4.0"
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
+    "@types/jsonwebtoken": "^8.5.6",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^16.11.11",
     "@types/socket.io": "^3.0.2",

@@ -1,7 +1,7 @@
-import express from "express";
+import { IUser } from "./types/user";
+import express, { Request, Response } from "express";
 import cors from "cors";
-import * as http from "http";
-import * as socketio from "socket.io";
+import jwt from "jsonwebtoken";
 
 export class ExpressApp {
   public app: express.Application;
@@ -12,8 +12,20 @@ export class ExpressApp {
   }
 
   private configureRoutes(): void {
-    this.app.get("/auth", (req, res) => {
-      
+    this.app.get("/auth", (req: Request, res: Response) => {
+      const access_token: string | undefined =
+        req.headers["x-auth-token"]?.toString();
+
+      if (typeof access_token === "undefined") {
+        return res.status(401).json({
+          message: "No access token provided",
+        });
+      }
+
+      if (typeof access_token == "string") {
+        const decode = jwt.verify(access_token, "secret");
+        const { email } = decode as IUser;
+      }
     });
   }
 }
