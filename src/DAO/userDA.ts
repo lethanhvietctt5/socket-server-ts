@@ -1,7 +1,7 @@
-import { IUser } from "./../types/user";
-import UserModel from "./../models/user";
+import { IUser } from "../types/user";
+import UserModel from "../models/user";
 
-export class UserDA {
+export class UserDAO {
   constructor() {}
   public getUserByEmail = async (email: string): Promise<IUser | null> => {
     const user: IUser | null = await UserModel.findOne({
@@ -27,6 +27,6 @@ export class UserDA {
   // public getAllContacts = async (email: string): Promise<IUser[]> => {};
 }
 
-const userDA = new UserDA();
+const userDAO = new UserDAO();
 
-export default userDA;
+export default userDAO;

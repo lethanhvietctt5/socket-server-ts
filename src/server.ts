@@ -2,11 +2,6 @@ import * as http from "http";
 import * as socketio from "socket.io";
 import expressApp from "./app";
 import mongoose from "mongoose";
-import UserModel from "./models/user";
-import { UserDA } from "./DA/userDA";
-import { IUser } from "./types/user";
-
-const userDA = new UserDA();
 
 const uri: string =
   "mongodb+srv://lethanhviet:22102000@cluster0.qrnr2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";

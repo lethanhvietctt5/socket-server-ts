@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import userDA from "../DA/userDA";
+import DAO from "../DAO";
 import { Router, Request, Response } from "express";
 import Token from "../types/token";
 
@@ -7,7 +7,7 @@ const loginRoute = Router();
 
 loginRoute.post("/", async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const user = await userDA.getUserByEmail(email);
+  const user = await DAO.userDAO.getUserByEmail(email);
 
   if (user && user.password === password) {
     const token: Token = {
