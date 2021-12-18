@@ -8,4 +8,6 @@ const userSchema: Schema = new Schema({
   created_at: { type: Date, default: Date.now },
 });
 
+userSchema.index({ name: "text", email: "text" });
+
 export default model("User", userSchema);

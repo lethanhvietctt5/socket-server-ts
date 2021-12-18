@@ -20,6 +20,16 @@ export class UserDAO {
     return result;
   };
 
+  public searchUser = async (keyword: string): Promise<IUser[]> => {
+    let result: IUser[] = await UserModel.find({
+      $text: { $search: keyword },
+      $state: true,
+      hide: false,
+    });
+
+    return result;
+  };
+
   // public getAllContacts = async (email: string): Promise<IUser[]> => {};
 }
 
