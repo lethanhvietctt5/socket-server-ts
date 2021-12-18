@@ -5,8 +5,8 @@ const messageGroupSchema: Schema = new Schema({
   id_group: { type: String, required: true },
   content: { type: String, required: true },
   type: { type: String, required: true },
-  sent_at: { type: Date, default: Date.now, required: true },
-  is_removed: { type: Boolean, default: false, required: true },
+  sent_at: { type: Date, default: Date.now },
+  is_removed: { type: Boolean, default: false },
 });
 
 export default model("MessageGroup", messageGroupSchema);

@@ -11,7 +11,7 @@ registerRoute.post("/", async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Email already exist" });
   }
 
-  const user = await DAO.userDAO.createUser(email, password, name);
+  const user = await DAO.userDAO.createUser(email, name, password);
   return res.status(200).send({ user });
 });
 
