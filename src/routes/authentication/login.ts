@@ -12,7 +12,7 @@ loginRoute.post("/", async (req: Request, res: Response) => {
   if (user && user.password === password) {
     const token: Token = {
       email: user.email,
-      expriredAt: new Date().getTime() + 7 * 60 * 60 * 24,
+      expriredAt: Date.now() + 7 * 60 * 60 * 24 * 1000,
     };
     const tokenString = jwt.sign(token, "secret", { expiresIn: "1h" });
     return res.status(200).json({ access_token: tokenString });
