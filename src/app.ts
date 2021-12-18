@@ -1,7 +1,5 @@
-import { IUser } from "./types/user";
 import express, { Request, Response } from "express";
 import cors from "cors";
-import jwt from "jsonwebtoken";
 import router from "./routes";
 
 export class ExpressApp {

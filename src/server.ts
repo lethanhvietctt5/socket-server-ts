@@ -3,8 +3,7 @@ import * as socketio from "socket.io";
 import expressApp from "./app";
 import mongoose from "mongoose";
 
-const uri: string =
-  "mongodb+srv://lethanhviet:22102000@cluster0.qrnr2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri: string = "mongodb+srv://lethanhviet:22102000@cluster0.qrnr2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
 class SocketServer {
   private port: string | number;

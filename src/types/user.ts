@@ -1,8 +1,10 @@
 import { Document, ObjectId } from "mongoose";
 
-export interface IUser extends Document {
+export default interface IUser extends Document {
   _id: ObjectId;
-  name: string;
   email: string;
+  name: string;
   password: string;
+  image_url: string;
+  created_at: Date;
 }

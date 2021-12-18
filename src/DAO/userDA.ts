@@ -1,4 +1,4 @@
-import { IUser } from "../types/user";
+import IUser from "../types/user";
 import UserModel from "../models/user";
 
 export class UserDAO {
@@ -10,11 +10,7 @@ export class UserDAO {
     return user;
   };
 
-  public createUser = async (
-    email: string,
-    name: string,
-    password: string
-  ): Promise<IUser> => {
+  public createUser = async (email: string, name: string, password: string): Promise<IUser> => {
     const newUser: IUser = new UserModel({
       email: email,
       name: name,

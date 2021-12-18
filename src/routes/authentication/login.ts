@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
-import DAO from "../DAO";
+import DAO from "../../DAO";
 import { Router, Request, Response } from "express";
-import Token from "../types/token";
+import Token from "../../types/token";
 
 const loginRoute = Router();
 

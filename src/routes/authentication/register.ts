@@ -1,4 +1,4 @@
-import DAO from "../DAO";
+import DAO from "../../DAO";
 import { Router, Request, Response } from "express";
 
 const registerRoute = Router();

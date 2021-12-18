@@ -1,13 +1,12 @@
 import jwt from "jsonwebtoken";
-import DAO from "../DAO";
+import DAO from "../../DAO";
 import { Router, Request, Response } from "express";
-import Token from "../types/token";
+import Token from "../../types/token";
 
 const authRoute = Router();
 
 authRoute.post("/", async (req: Request, res: Response) => {
-  const access_token: string | undefined =
-    req.headers["x-auth-token"]?.toString();
+  const access_token: string | undefined = req.headers["x-auth-token"]?.toString();
 
   if (typeof access_token === "undefined") {
     return res.status(401).json({
