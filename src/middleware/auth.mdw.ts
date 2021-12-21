@@ -7,9 +7,7 @@ export default async function authMiddleware(req: Request, res: Response, next: 
   const access_token: string | undefined = req.headers["x-auth-token"]?.toString();
 
   if (typeof access_token === "undefined") {
-    return res.status(401).json({
-      message: "No access token provided",
-    });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   const decode = jwt.verify(access_token, "secret");
@@ -24,9 +22,7 @@ export default async function authMiddleware(req: Request, res: Response, next: 
   const user = await DAO.userDAO.getUserByEmail(email);
 
   if (user === null) {
-    return res.status(200).json({
-      message: "User not found",
-    });
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   res.locals.user_email = email;
