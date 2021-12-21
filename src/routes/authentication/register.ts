@@ -12,7 +12,7 @@ registerRoute.post("/", async (req: Request, res: Response) => {
   }
 
   const user = await DAO.userDAO.createUser(email, name, password);
-  return res.status(200).send({ user });
+  return res.status(200).json({ user });
 });
 
 export default registerRoute;

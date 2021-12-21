@@ -15,8 +15,6 @@ export default async function authMiddleware(req: Request, res: Response, next: 
   const decode = jwt.verify(access_token, "secret");
   const { email, expriredAt } = decode as Token;
 
-  console.log(new Date(Date.now()) + "-" + new Date(expriredAt));
-
   if (expriredAt < Date.now()) {
     return res.status(401).json({
       message: "Token expired",
@@ -31,5 +29,7 @@ export default async function authMiddleware(req: Request, res: Response, next: 
     });
   }
 
-  next();
+  res.locals.user_email = email;
+
+  return next();
 }

@@ -8,3 +8,12 @@ export default interface IUser extends Document {
   image_url: string;
   created_at: Date;
 }
+
+export interface IUserJSON {
+  _id: string;
+  email: string;
+  name: string;
+  password: string;
+  image_url: string;
+  created_at: Date;
+}

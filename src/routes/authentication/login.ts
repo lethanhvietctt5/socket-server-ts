@@ -14,7 +14,7 @@ loginRoute.post("/", async (req: Request, res: Response) => {
       email: user.email,
       expriredAt: Date.now() + 7 * 60 * 60 * 24 * 1000,
     };
-    const tokenString = jwt.sign(token, "secret", { expiresIn: "1h" });
+    const tokenString = jwt.sign(token, "secret");
     return res.status(200).json({ access_token: tokenString });
   }
   return res.status(401).json({ message: "Invalid credentials" });
