@@ -1,13 +1,13 @@
 import { Router } from "express";
+import authMiddleware from "../middleware/auth.mdw";
 import authRoute from "./authentication/auth";
 import loginRoute from "./authentication/login";
 import registerRoute from "./authentication/register";
 import searchRoute from "./user/search";
 import contactRoute from "./contact/contact";
-
-import authMiddleware from "../middleware/auth.mdw";
 import priorityRoute from "./user/priority";
 import blokckRoute from "./user/block";
+import groupRoute from "./group/group";
 
 const router = Router();
 
@@ -23,5 +23,8 @@ router.use("/block", authMiddleware, blokckRoute);
 
 // Contact
 router.use("/contacts", authMiddleware, contactRoute);
+
+// Group
+router.use("/group", authMiddleware, groupRoute);
 
 export default router;
