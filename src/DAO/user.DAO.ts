@@ -1,4 +1,4 @@
-import { IUserJSON } from "./../types/user";
+import { IUserJSON } from "../types/user";
 import IUser from "../types/user";
 import UserModel from "../models/user";
 

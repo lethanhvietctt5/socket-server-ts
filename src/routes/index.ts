@@ -6,13 +6,20 @@ import searchRoute from "./user/search";
 import contactRoute from "./contact/contact";
 
 import authMiddleware from "../middleware/auth.mdw";
+import priorityRoute from "./user/priority";
 
 const router = Router();
 
+// Authentication
 router.use("/auth", authRoute);
 router.use("/login", loginRoute);
 router.use("/register", registerRoute);
+
+// User
 router.use("/search", authMiddleware, searchRoute);
+router.use("/priority", authMiddleware, priorityRoute);
+
+// Contact
 router.use("/contacts", authMiddleware, contactRoute);
 
 export default router;

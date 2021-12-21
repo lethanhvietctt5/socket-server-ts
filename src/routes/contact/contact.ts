@@ -56,6 +56,7 @@ contactRoute.post("/accept", async (req: Request, res: Response) => {
     }
     return res.status(401).json({ message: "Unauthorized" });
   }
+  return res.status(401).json({ message: "Unauthorized" });
 });
 
 contactRoute.post("/remove", async (req: Request, res: Response) => {
@@ -73,6 +74,8 @@ contactRoute.post("/remove", async (req: Request, res: Response) => {
     }
     return res.status(401).json({ message: "Unauthorized" });
   }
+
+  return res.status(401).json({ message: "Unauthorized" });
 });
 
 export default contactRoute;

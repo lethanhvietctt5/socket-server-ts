@@ -1,5 +1,5 @@
-import { IUserJSON } from "./../types/user";
-import { IContactJSON } from "./../types/contact";
+import { IUserJSON } from "../types/user";
+import { IContactJSON } from "../types/contact";
 import IContact from "../types/contact";
 import ContactModel from "../models/contact";
 import IUser from "../types/user";
