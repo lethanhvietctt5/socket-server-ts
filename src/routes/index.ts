@@ -7,6 +7,7 @@ import contactRoute from "./contact/contact";
 
 import authMiddleware from "../middleware/auth.mdw";
 import priorityRoute from "./user/priority";
+import blokckRoute from "./user/block";
 
 const router = Router();
 
@@ -18,6 +19,7 @@ router.use("/register", registerRoute);
 // User
 router.use("/search", authMiddleware, searchRoute);
 router.use("/priority", authMiddleware, priorityRoute);
+router.use("/block", authMiddleware, blokckRoute);
 
 // Contact
 router.use("/contacts", authMiddleware, contactRoute);

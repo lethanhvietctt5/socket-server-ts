@@ -5,6 +5,7 @@ import PriorityModel from "../models/priority";
 import IPriority from "../types/priority";
 
 export class PriorityDAO {
+  constructor() {}
   public getAllPriorities = async (userEmail: string): Promise<IPriority[] | null> => {
     const user: IUser | null = await DAO.userDAO.getUserByEmail(userEmail);
 
