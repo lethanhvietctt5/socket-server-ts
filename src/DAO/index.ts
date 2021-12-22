@@ -3,6 +3,7 @@ import userDAO from "./user.DAO";
 import contactDAO from "./contact.DAO";
 import blockDAO from "./block.DAO";
 import groupDAO from "./group.DAO";
+import messageDAO from "./message.DAO";
 
 const DAO = {
   userDAO,
@@ -10,6 +11,7 @@ const DAO = {
   priorityDAO,
   blockDAO,
   groupDAO,
+  messageDAO,
 };
 
 export default DAO;

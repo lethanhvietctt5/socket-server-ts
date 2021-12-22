@@ -13,8 +13,8 @@ export class ContactDAO {
     return contact;
   };
 
-  public getAllContacts = async (email: string): Promise<IContact[]> => {
-    const user = await DAO.userDAO.getUserByEmail(email);
+  public getAllContacts = async (user_id: string): Promise<IContact[]> => {
+    const user = await DAO.userDAO.getUserById(user_id);
     if (user) {
       const contacts: IContact[] = await ContactModel.find({
         $or: [{ id_user_requested: user._id }, { id_user_requested_to: user._id }],

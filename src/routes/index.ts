@@ -8,6 +8,7 @@ import contactRoute from "./contact/contact";
 import priorityRoute from "./user/priority";
 import blokckRoute from "./user/block";
 import groupRoute from "./group/group";
+import messageRoute from "./message/message";
 
 const router = Router();
 
@@ -26,5 +27,8 @@ router.use("/contacts", authMiddleware, contactRoute);
 
 // Group
 router.use("/group", authMiddleware, groupRoute);
+
+// Message
+router.use("/message", authMiddleware, messageRoute);
 
 export default router;

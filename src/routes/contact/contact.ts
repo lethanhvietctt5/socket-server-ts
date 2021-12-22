@@ -9,16 +9,20 @@ const contactRoute = Router();
 contactRoute.get("/", async (req: Request, res: Response) => {
   if (res.locals.user_email) {
     const email = res.locals.user_email as string;
-
-    const result = await DAO.contactDAO.getAllContacts(email);
-    let resultJSON: IContactJSON[] = [];
-    for (let item of result) {
-      const itemJSON = await DAO.contactDAO.toJSON(item);
-      if (itemJSON) {
-        resultJSON.push(itemJSON);
+    const user = await DAO.userDAO.getUserByEmail(email);
+    if (user) {
+      const result = await DAO.contactDAO.getAllContacts(user.id);
+      let resultJSON: IContactJSON[] = [];
+      for (let item of result) {
+        const itemJSON = await DAO.contactDAO.toJSON(item);
+        if (itemJSON) {
+          resultJSON.push(itemJSON);
+        }
       }
+      return res.status(200).json(resultJSON);
     }
-    return res.status(200).json(resultJSON);
+
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   return res.status(401).json({ message: "Unauthorized" });
