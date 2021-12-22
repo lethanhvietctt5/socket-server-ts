@@ -1,4 +1,5 @@
-import { IUserJSON } from "./../types/user";
+import { IGroupJSON } from "./../types/group";
+import IUser, { IUserJSON } from "./../types/user";
 import { IMainMessageJSON } from "./../types/message";
 import DAO from ".";
 import MessageModel from "../models/message";
@@ -37,21 +38,23 @@ export class MessageDAO {
     return message;
   };
 
-  public getGroupMessage = async (id_group: string): Promise<IMessage[]> => {
+  public getGroupMessage = async (id_group: string): Promise<IMessageGroup[]> => {
     const messages = await MessageGroupModel.find({ id_group });
 
     return messages;
   };
 
-  public addGroupMessage = async (id_group: string, id_sender: string, content: string, type: string = "text") => {
-    const message = new MessageGroupModel({
+  public addGroupMessage = async (id_group: string, id_sender: string, content: string, type: string = "text"): Promise<IMessageGroup | null> => {
+    const message: IMessageGroup | null = new MessageGroupModel({
       id_group,
       id_sender,
       content,
       type,
     });
 
-    await message.save();
+    if (message) {
+      await message.save();
+    }
     return message;
   };
 
@@ -145,6 +148,58 @@ export class MessageDAO {
     }
 
     return result;
+  };
+
+  public toJSON = async (message: IMessage | IMessageGroup): Promise<IMainMessageJSON | null> => {
+    const sender = await DAO.userDAO.getUserById(message.id_sender);
+    const senderJSON = (await DAO.userDAO.toJSON(sender)) as IUserJSON;
+
+    let receiver: IUser | null;
+    let receiverJSON: IUserJSON | null = null;
+    if ((message as IMessage).id_receiver) {
+      receiver = await DAO.userDAO.getUserById((message as IMessage).id_receiver);
+      receiverJSON = await DAO.userDAO.toJSON(receiver);
+    }
+
+    let group: IGroup | null;
+    let groupJSON: IGroupJSON | null = null;
+    if ((message as IMessageGroup).id_group) {
+      group = await DAO.groupDAO.getGroupById((message as IMessageGroup).id_group);
+      if (group && sender) {
+        const groupMember = await DAO.groupDAO.getYourDetails(sender.id, group.id);
+        groupJSON = await DAO.groupDAO.toJSON(groupMember);
+      }
+    }
+
+    if (receiverJSON) {
+      let singeMessage: IMainMessageJSON = {
+        _id: message._id,
+        sender: senderJSON,
+        receiver: receiverJSON,
+        group: null,
+        content: message.content,
+        type: message.type,
+        sent_at: message.sent_at,
+        is_removed: message.is_removed,
+      };
+
+      return singeMessage;
+    } else if (groupJSON) {
+      let singeMessage: IMainMessageJSON = {
+        _id: message._id,
+        sender: senderJSON,
+        receiver: null,
+        group: groupJSON,
+        content: message.content,
+        type: message.type,
+        sent_at: message.sent_at,
+        is_removed: message.is_removed,
+      };
+
+      return singeMessage;
+    }
+
+    return null;
   };
 }
 

@@ -33,7 +33,7 @@ contactRoute.post("/add", async (req: Request, res: Response) => {
     const email = res.locals.user_email as string;
     const user = await DAO.userDAO.getUserByEmail(email);
     if (user) {
-      const contactJSON = await DAO.contactDAO.addContact(user, req.body.email_request_to);
+      const contactJSON: IContactJSON | null = await DAO.contactDAO.addContact(user, req.body.email_request_to);
       if (contactJSON) {
         return res.status(200).json(contactJSON);
       }
