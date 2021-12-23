@@ -8,6 +8,7 @@ export default interface IGroup extends Document {
   is_deleted: boolean;
 }
 
+// Need to be implemented at client side
 export interface IGroupJSON {
   _id: string;
   name: string;

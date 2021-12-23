@@ -10,6 +10,7 @@ export default interface IBlock extends Document {
   updated_at: Date;
 }
 
+// Need to be implemented at client side
 export interface IBlockJSON {
   _id: string;
   user: IUserJSON;

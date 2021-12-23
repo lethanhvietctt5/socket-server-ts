@@ -10,6 +10,7 @@ export default interface IPriority extends Document {
   updated_at: Date;
 }
 
+// Need to be implemented at client side
 export interface IPriorityJSON {
   _id: string;
   user: IUserJSON;

@@ -9,6 +9,7 @@ export default interface IContact extends Document {
   removed_at: Date | null;
 }
 
+// Need to be implemented at client side
 export interface IContactJSON {
   _id: string;
   user_requested: IUserJSON;

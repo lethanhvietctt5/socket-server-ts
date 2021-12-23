@@ -9,6 +9,7 @@ export default interface IUser extends Document {
   created_at: Date;
 }
 
+// Need to be implemented at client side
 export interface IUserJSON {
   _id: string;
   email: string;

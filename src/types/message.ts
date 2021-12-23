@@ -24,6 +24,7 @@ export interface IMessageJSON {
   is_notification: boolean;
 }
 
+// Need to be implemented at client side
 export interface IMainMessageJSON {
   _id: ObjectId;
   sender: IUserJSON;
