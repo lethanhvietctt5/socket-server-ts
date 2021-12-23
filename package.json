@@ -7,7 +7,6 @@
   "license": "MIT",
   "scripts": {
     "start": "node build/index.js",
-    "prestart": "yarn run build",
     "build": "tsc",
     "dev": "ts-node src/index.ts",
     "postinstall": "npm run build"
