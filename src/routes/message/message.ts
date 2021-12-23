@@ -61,8 +61,12 @@ messageRoute.post("/invidual/add", async (req: Request, res: Response) => {
 
     if (user) {
       const invidualMessages = await DAO.messageDAO.addInvidualMessage(user._id.valueOf().toString(), id_user_contact, content);
-      const result: IMainMessageJSON | null = await DAO.messageDAO.toJSON(invidualMessages);
-      return res.status(200).json(result);
+      if (invidualMessages) {
+        const result: IMainMessageJSON | null = await DAO.messageDAO.toJSON(invidualMessages);
+        return res.status(200).json(result);
+      }
+
+      return res.status(400).json({ message: "Error" });
     }
   }
 

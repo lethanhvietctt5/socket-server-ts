@@ -2,6 +2,7 @@ import { IUserJSON } from "./../types/user";
 import { IGroupJSON } from "./../types/group";
 import GroupModel from "../models/group";
 import GroupMemberModel from "../models/group_member";
+import UserModel from "../models/user";
 import IGroup from "../types/group";
 import IGroupMember from "../types/group_member";
 import IUser from "../types/user";
@@ -99,6 +100,25 @@ export class GroupDAO {
     if (groupMember) {
       return groupMember;
     }
+    return null;
+  };
+
+  public getAllMembersOfGroup = async (id_group: string): Promise<IUserJSON[] | null> => {
+    const group: IGroup | null = await this.getGroupById(id_group);
+    if (group) {
+      const groupMembers: IGroupMember[] = await GroupMemberModel.find({ id_group });
+      if (groupMembers.length > 0) {
+        const members: IUser[] = await UserModel.find({ _id: { $in: groupMembers.map((member) => member.id_member) } });
+        const membersJSON: IUserJSON[] = await Promise.all(
+          members.map(async (member): Promise<IUserJSON> => {
+            const JSON = (await DAO.userDAO.toJSON(member)) as IUserJSON;
+            return JSON;
+          })
+        );
+        return membersJSON;
+      }
+    }
+
     return null;
   };
 

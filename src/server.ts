@@ -1,5 +1,5 @@
 import { IContactJSON } from "./types/contact";
-import { IMainMessageJSON } from "./types/message";
+import IMessage, { IMainMessageJSON, IMessageJSON } from "./types/message";
 import * as http from "http";
 import * as socketio from "socket.io";
 import expressApp from "./app";
@@ -7,8 +7,9 @@ import mongoose from "mongoose";
 import EVENT from "./events";
 import DAO from "./DAO";
 import IMessageGroup from "./types/message_group";
-import IGroup from "./types/group";
+import IGroup, { IGroupJSON } from "./types/group";
 import IGroupMember from "./types/group_member";
+import IUser from "./types/user";
 
 const uri: string = "mongodb+srv://lethanhviet:22102000@cluster0.qrnr2.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 
@@ -23,7 +24,7 @@ class SocketServer {
   public static onlineUsers: IUserOnline[] = [];
 
   constructor() {
-    this.port = process.env.PORT || 4000;
+    this.port = process.env.PORT || 3000;
     this.server = http.createServer(expressApp.app);
     this.io = new socketio.Server(this.server, {
       cors: {
@@ -95,17 +96,30 @@ class SocketServer {
 
   public sendAndReceiveMessage = (socket: any) => {
     // Client gửi tin nhắn đi
-    socket.on(EVENT.send_message, (message: IMainMessageJSON) => {
-      // Tin nhắn group
-      if (message.group) {
-        // Gửi đến group
-        socket.to(message.group._id).emit(EVENT.recieve_message, message);
-      }
-      // Tin nhắn cá nhân
-      else if (message.receiver) {
-        const user_online = SocketServer.onlineUsers.find((user) => user.userID === message.receiver?._id);
-        if (user_online) {
-          socket.to(user_online.socketId).emit(EVENT.recieve_message, message);
+    socket.on(EVENT.send_message, async (params: { id_sender: string; content: string; id_receiver?: string; id_group?: string }) => {
+      if (params.id_receiver) {
+        // Tạo và lưu tin nhắn vào database
+        const message: IMessage | null = await DAO.messageDAO.addInvidualMessage(params.id_sender, params.id_receiver, params.content);
+        if (message) {
+          const messageJSON: IMainMessageJSON | null = await DAO.messageDAO.toJSON(message);
+
+          if (messageJSON) {
+            // Gửi tin nhắn đến người nhận
+            const user_online = SocketServer.onlineUsers.find((user) => user.userID === params.id_receiver);
+            if (user_online) {
+              socket.to(user_online.socketId).emit(EVENT.recieve_message, messageJSON);
+            }
+          }
+        }
+      } else if (params.id_group) {
+        // Tạo và lưu tin nhắn vào database
+        const message: IMessageGroup | null = await DAO.messageDAO.addGroupMessage(params.id_sender, params.id_group, params.content);
+        if (message) {
+          const messageJSON: IMainMessageJSON | null = await DAO.messageDAO.toJSON(message);
+          if (messageJSON) {
+            // Gửi tin nhắn đến group
+            socket.to(params.id_group).emit(EVENT.recieve_message, messageJSON);
+          }
         }
       }
     });
@@ -115,8 +129,8 @@ class SocketServer {
     // Thêm một thành viên mới vào group
     socket.on(EVENT.add_new_member, async (params: { id_new_member: string; id_user_added: string; id_group: string }) => {
       // Xác định người thêm vào, group và thành viên mới
-      const sender = await DAO.userDAO.getUserById(params.id_user_added);
-      const group = await DAO.groupDAO.getGroupById(params.id_group);
+      const sender: IUser | null = await DAO.userDAO.getUserById(params.id_user_added);
+      const group: IGroup | null = await DAO.groupDAO.getGroupById(params.id_group);
       const new_member = await DAO.userDAO.getUserById(params.id_new_member);
       if (sender && group && new_member) {
         // Tạo tin nhắn nhóm với nội dung thông báo có người mới được thêm vào group
@@ -126,11 +140,12 @@ class SocketServer {
 
         if (message && groupAdded) {
           let notification: IMainMessageJSON | null = await DAO.messageDAO.toJSON(message);
-          const groupMember = await DAO.groupDAO.getYourDetails(params.id_new_member, params.id_group);
-          const groupMemberJSON = await DAO.groupDAO.toJSON(groupMember);
+          const groupMember: IGroupMember | null = await DAO.groupDAO.getYourDetails(params.id_new_member, params.id_group);
+          const groupMemberJSON: IGroupJSON | null = await DAO.groupDAO.toJSON(groupMember);
           if (notification && groupMemberJSON) {
             // Gửi tin nhắn thông báo tới các client trong group
             socket.to(message.id_group).emit(EVENT.recieve_message, notification);
+
             const client_online = SocketServer.onlineUsers.find((user) => user.userID === params.id_new_member);
             if (client_online) {
               // Gửi thông báo đến người dùng mới được thêm vào group
@@ -177,9 +192,11 @@ class SocketServer {
       const user_request = await DAO.userDAO.getUserById(params.id_user);
 
       if (user_request) {
+        // Tạo một contact mới và lưu vào database
         const new_contact: IContactJSON | null = await DAO.contactDAO.addContact(user_request, params.id_user_contact);
         const user_online = SocketServer.onlineUsers.find((user) => user.userID === params.id_user_contact);
         if (new_contact && user_online) {
+          // Gửi thông báo đến cho client được gửi request add contact
           socket.to(user_online.socketId).emit(EVENT.is_added_contact, new_contact);
         }
       }
@@ -188,17 +205,24 @@ class SocketServer {
 
   public removeContact = (socket: any) => {
     socket.on(EVENT.remove_contact, async (params: { id_user: string; id_contact: string }) => {
+      // Thực hiện remove contact trên database (remove_at != null)
       const contact = await DAO.contactDAO.removeContact(params.id_contact);
       if (contact) {
         const contactJSON = await DAO.contactDAO.toJSON(contact);
+
+        // Nếu người remove là người gửi yêu cầu (user_requested)
         if (contactJSON && contactJSON.user_requested._id === params.id_user) {
           const user_online = SocketServer.onlineUsers.find((user) => user.userID === contactJSON.user_requested_to._id);
           if (user_online) {
+            // Gửi thông điệp đến client bị remove contact để cập nhật danh sách contact cho cả 2 bên
             socket.to(user_online.socketId).emit(EVENT.is_removed_contact, contactJSON);
           }
-        } else if (contactJSON && contactJSON.user_requested_to._id === params.id_user) {
+        }
+        // Nếu người remove là người nhận yêu cầu (user_requested_to)
+        else if (contactJSON && contactJSON.user_requested_to._id === params.id_user) {
           const user_online = SocketServer.onlineUsers.find((user) => user.userID === contactJSON.user_requested._id);
           if (user_online) {
+            // Gửi thông điệp đến client bị remove contact để cập nhật danh sách contact cho cả 2 bên
             socket.to(user_online.socketId).emit(EVENT.is_removed_contact, contactJSON);
           }
         }
@@ -209,6 +233,8 @@ class SocketServer {
   public acceptContact = (socket: any) => {
     socket.on(EVENT.accept_contact, async (params: { id_user: string; id_contact: string }) => {
       const user_accept = await DAO.userDAO.getUserById(params.id_user);
+
+      // Cập nhật contact trên database (is_accepted = true)
       let contact = await DAO.contactDAO.acceptContact(params.id_contact);
       if (user_accept && contact && user_accept.id === contact.id_user_requested_to) {
         contact = await DAO.contactDAO.acceptContact(params.id_contact);
@@ -216,6 +242,7 @@ class SocketServer {
         if (contactJSON) {
           const user_online = SocketServer.onlineUsers.find((user) => user.userID === contactJSON.user_requested._id);
           if (user_online) {
+            // Gửi thông báo đến client được accept contact để cập nhật danh sách contact cho cả 2 bên
             socket.to(user_online.socketId).emit(EVENT.is_accepted_contact, contactJSON);
           }
         }

@@ -33,12 +33,15 @@ contactRoute.post("/add", async (req: Request, res: Response) => {
     const email = res.locals.user_email as string;
     const user = await DAO.userDAO.getUserByEmail(email);
     if (user) {
-      const contactJSON: IContactJSON | null = await DAO.contactDAO.addContact(user, req.body.email_request_to);
-      if (contactJSON) {
-        return res.status(200).json(contactJSON);
+      const id_user_contact = req.body.id_user_contact as string;
+      if (id_user_contact) {
+        const contactJSON: IContactJSON | null = await DAO.contactDAO.addContact(user, id_user_contact);
+        if (contactJSON) {
+          return res.status(200).json(contactJSON);
+        }
+        return res.status(400).json({ message: "Error adding contact" });
       }
-
-      return res.status(400).json({ message: "Error adding contact" });
+      return res.status(400).json({ message: "Missing id_user_contact" });
     }
     return res.status(401).json({ message: "Unauthorized" });
   }

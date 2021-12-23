@@ -26,16 +26,22 @@ export class MessageDAO {
     return messages;
   };
 
-  public addInvidualMessage = async (id_sender: string, id_receiver: string, content: string, type: string = "text") => {
-    const message: IMessage = new MessageModel({
-      id_sender,
-      id_receiver,
-      content,
-      type,
-    });
+  public addInvidualMessage = async (id_sender: string, id_receiver: string, content: string, type: string = "text"): Promise<IMessage | null> => {
+    const sender = await DAO.userDAO.getUserById(id_sender);
+    const receiver = await DAO.userDAO.getUserById(id_receiver);
+    if (sender && receiver) {
+      const message: IMessage = new MessageModel({
+        id_sender,
+        id_receiver,
+        content,
+        type,
+      });
 
-    await message.save();
-    return message;
+      await message.save();
+      return message;
+    }
+
+    return null;
   };
 
   public getGroupMessage = async (id_group: string): Promise<IMessageGroup[]> => {
