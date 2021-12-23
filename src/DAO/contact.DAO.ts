@@ -24,8 +24,8 @@ export class ContactDAO {
     return [];
   };
 
-  public addContact = async (user_request: IUser, email_contact: string): Promise<IContactJSON | null> => {
-    const user_requested_to: IUser | null = await DAO.userDAO.getUserByEmail(email_contact);
+  public addContact = async (user_request: IUser, id_user_contact: string): Promise<IContactJSON | null> => {
+    const user_requested_to: IUser | null = await DAO.userDAO.getUserById(id_user_contact);
     if (user_requested_to) {
       let contacts: IContact[] = await ContactModel.find({
         $or: [

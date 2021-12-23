@@ -44,12 +44,19 @@ export class MessageDAO {
     return messages;
   };
 
-  public addGroupMessage = async (id_group: string, id_sender: string, content: string, type: string = "text"): Promise<IMessageGroup | null> => {
+  public addGroupMessage = async (
+    id_group: string,
+    id_sender: string,
+    content: string,
+    type: string = "text",
+    is_notification: boolean = false
+  ): Promise<IMessageGroup | null> => {
     const message: IMessageGroup | null = new MessageGroupModel({
       id_group,
       id_sender,
       content,
       type,
+      is_notification,
     });
 
     if (message) {
@@ -121,6 +128,7 @@ export class MessageDAO {
         type: message.type,
         sent_at: message.sent_at,
         is_removed: message.is_removed,
+        is_notification: message.is_notification,
       };
 
       result.push(singeMessage);
@@ -142,6 +150,7 @@ export class MessageDAO {
         type: message.type,
         sent_at: message.sent_at,
         is_removed: message.is_removed,
+        is_notification: message.is_notification,
       };
 
       result.push(groupMessage);
@@ -181,6 +190,7 @@ export class MessageDAO {
         type: message.type,
         sent_at: message.sent_at,
         is_removed: message.is_removed,
+        is_notification: message.is_notification,
       };
 
       return singeMessage;
@@ -194,6 +204,7 @@ export class MessageDAO {
         type: message.type,
         sent_at: message.sent_at,
         is_removed: message.is_removed,
+        is_notification: message.is_notification,
       };
 
       return singeMessage;

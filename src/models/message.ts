@@ -7,6 +7,7 @@ const messageSchema: Schema = new Schema({
   type: { type: String, required: true },
   sent_at: { type: Date, default: Date.now },
   is_removed: { type: Boolean, default: false },
+  is_notification: { type: Boolean, default: false },
 });
 
 export default model("Message", messageSchema);

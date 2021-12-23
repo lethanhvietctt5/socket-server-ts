@@ -10,6 +10,7 @@ export default interface IMessage extends Document {
   type: string;
   sent_at: Date;
   is_removed: boolean;
+  is_notification: boolean;
 }
 
 export interface IMessageJSON {
@@ -20,6 +21,7 @@ export interface IMessageJSON {
   type: string;
   sent_at: Date;
   is_removed: boolean;
+  is_notification: boolean;
 }
 
 export interface IMainMessageJSON {
@@ -31,4 +33,5 @@ export interface IMainMessageJSON {
   type: string;
   sent_at: Date;
   is_removed: boolean;
+  is_notification: boolean;
 }

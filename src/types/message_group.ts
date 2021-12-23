@@ -10,6 +10,7 @@ export default interface IMessageGroup extends Document {
   type: string;
   sent_at: Date;
   is_removed: boolean;
+  is_notification: boolean;
 }
 
 export interface IMessageGroupJSON {
@@ -20,4 +21,5 @@ export interface IMessageGroupJSON {
   type: string;
   sent_at: Date;
   is_removed: boolean;
+  is_notification: boolean;
 }

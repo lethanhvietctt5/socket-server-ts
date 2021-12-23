@@ -70,11 +70,7 @@ groupRoute.post("/add", async (req: Request, res: Response) => {
     const newMember = await DAO.userDAO.getUserById(id_new_user);
     const group = await DAO.groupDAO.getGroupById(id_group);
     if (newMember && group && userAdded) {
-      const groupInfo: IGroup | null = await DAO.groupDAO.addNewMember(
-        newMember._id.valueOf().toString(),
-        group._id.valueOf().toString(),
-        userAdded._id.valueOf().toString()
-      );
+      const groupInfo: IGroup | null = await DAO.groupDAO.addNewMember(newMember.id, group.id, userAdded.id);
 
       if (groupInfo) {
         const groupMember = await DAO.groupDAO.getYourDetails(newMember._id.valueOf().toString(), group._id.valueOf().toString());
