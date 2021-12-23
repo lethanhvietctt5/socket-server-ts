@@ -20,10 +20,10 @@ class SocketServer {
   private port: string | number;
   private server: http.Server;
   private io: socketio.Server;
-  public static onlineUsers: IUserOnline[];
+  public static onlineUsers: IUserOnline[] = [];
 
   constructor() {
-    this.port = process.env.PORT || 3000;
+    this.port = process.env.PORT || 4000;
     this.server = http.createServer(expressApp.app);
     this.io = new socketio.Server(this.server, {
       cors: {
