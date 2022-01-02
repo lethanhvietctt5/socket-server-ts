@@ -235,9 +235,8 @@ class SocketServer {
       const user_accept = await DAO.userDAO.getUserById(params.id_user);
 
       // Cập nhật contact trên database (is_accepted = true)
-      let contact = await DAO.contactDAO.acceptContact(params.id_contact);
+      let contact = await DAO.contactDAO.acceptContact(params.id_contact, params.id_user);
       if (user_accept && contact && user_accept.id === contact.id_user_requested_to) {
-        contact = await DAO.contactDAO.acceptContact(params.id_contact);
         const contactJSON = await DAO.contactDAO.toJSON(contact);
         if (contactJSON) {
           const user_online = SocketServer.onlineUsers.find((user) => user.userID === contactJSON.user_requested._id);

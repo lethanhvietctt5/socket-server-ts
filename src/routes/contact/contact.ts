@@ -54,7 +54,7 @@ contactRoute.post("/accept", async (req: Request, res: Response) => {
     const id_contact: string = req.body.id_contact;
     const user = await DAO.userDAO.getUserByEmail(email);
     if (user && id_contact) {
-      const contact = await DAO.contactDAO.acceptContact(id_contact);
+      const contact = await DAO.contactDAO.acceptContact(id_contact, user.id);
       const contactJSON: IContactJSON | null = await DAO.contactDAO.toJSON(contact);
       if (contactJSON) {
         return res.status(200).json(contactJSON);

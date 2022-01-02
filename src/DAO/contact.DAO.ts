@@ -56,9 +56,9 @@ export class ContactDAO {
     return null;
   };
 
-  public acceptContact = async (id_contact: string): Promise<IContact | null> => {
+  public acceptContact = async (id_contact: string, id_user: string): Promise<IContact | null> => {
     let contact: IContact | null = await this.getContactById(id_contact);
-    if (contact) {
+    if (contact && contact.id_user_requested_to.valueOf().toString() === id_user) {
       contact.is_accepted = true;
       const result = await contact.save();
       return result;
