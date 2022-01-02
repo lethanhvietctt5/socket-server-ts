@@ -12,7 +12,8 @@ registerRoute.post("/", async (req: Request, res: Response) => {
   }
 
   const user = await DAO.userDAO.createUser(email, name, password);
-  return res.status(200).json({ user });
+  const userJSON = await DAO.userDAO.toJSON(user);
+  return res.status(200).json({ user: userJSON , message: "Register success"});
 });
 
 export default registerRoute;
