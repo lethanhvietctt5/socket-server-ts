@@ -7,6 +7,7 @@ export default interface IContact extends Document {
   id_user_requested_to: ObjectId;
   is_accepted: boolean;
   removed_at: Date | null;
+  is_priority: boolean;
 }
 
 // Need to be implemented at client side
@@ -16,4 +17,5 @@ export interface IContactJSON {
   user_requested_to: IUserJSON;
   is_accepted: boolean;
   removed_at: Date | null;
+  is_priority: boolean;
 }

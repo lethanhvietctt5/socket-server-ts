@@ -14,7 +14,6 @@ export interface IUserJSON {
   _id: string;
   email: string;
   name: string;
-  password: string;
   image_url: string;
   created_at: Date;
 }

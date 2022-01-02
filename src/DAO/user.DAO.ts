@@ -42,7 +42,6 @@ export class UserDAO {
         _id: user._id.valueOf().toString(),
         email: user.email,
         name: user.name,
-        password: user.password,
         image_url: user.image_url,
         created_at: user.created_at,
       };

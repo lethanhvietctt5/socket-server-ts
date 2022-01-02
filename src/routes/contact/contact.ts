@@ -1,4 +1,4 @@
-import { IContactJSON } from "./../../types/contact";
+import IContact, { IContactJSON } from "./../../types/contact";
 import { Router, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import DAO from "../../DAO";
@@ -82,6 +82,34 @@ contactRoute.post("/remove", async (req: Request, res: Response) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  return res.status(401).json({ message: "Unauthorized" });
+});
+
+contactRoute.post("/priority", async (req: Request, res: Response) => {
+  if (res.locals.user_email) {
+    const email = res.locals.user_email as string;
+    const id_contact: string = req.body.id_contact;
+    const user = await DAO.userDAO.getUserByEmail(email);
+    if (user && id_contact) {
+      let contact: IContact | null = await DAO.contactDAO.getContactById(id_contact);
+
+      if (contact != null) {
+        if (contact.is_priority) {
+          contact.is_priority = false;
+        } else {
+          contact.is_priority = true;
+        }
+        const new_contact = await contact.save();
+        const contactJSON: IContactJSON | null = await DAO.contactDAO.toJSON(new_contact);
+        if (contactJSON) {
+          return res.status(200).json(contactJSON);
+        }
+      }
+
+      return res.status(400).json({ message: "Contact not found" });
+    }
+    return res.status(401).json({ message: "Unauthorized" });
+  }
   return res.status(401).json({ message: "Unauthorized" });
 });
 

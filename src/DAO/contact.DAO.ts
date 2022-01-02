@@ -79,6 +79,28 @@ export class ContactDAO {
     return null;
   };
 
+  public addPriority = async (id_contact: string): Promise<IContact | null> => {
+    let contact: IContact | null = await this.getContactById(id_contact);
+    if (contact) {
+      contact.is_priority = true;
+      const result = await contact.save();
+      return result;
+    }
+
+    return null;
+  };
+
+  public removePriority = async (id_contact: string): Promise<IContact | null> => {
+    let contact: IContact | null = await this.getContactById(id_contact);
+    if (contact) {
+      contact.is_priority = false;
+      const result = await contact.save();
+      return result;
+    }
+
+    return null;
+  };
+
   public toJSON = async (contact: IContact | null): Promise<IContactJSON | null> => {
     let result: IContactJSON | null = null;
     if (contact) {
@@ -95,6 +117,7 @@ export class ContactDAO {
             user_requested_to: user_requested_to_json,
             is_accepted: contact.is_accepted,
             removed_at: contact.removed_at,
+            is_priority: contact.is_priority,
           };
         }
       }

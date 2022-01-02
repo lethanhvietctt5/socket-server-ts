@@ -27,8 +27,11 @@ authRoute.post("/", async (req: Request, res: Response) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  const userJSON = await DAO.userDAO.toJSON(user);
+
   return res.status(200).json({
     message: "Authenticated",
+    user: userJSON,
   });
 });
 

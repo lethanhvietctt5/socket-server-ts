@@ -1,4 +1,3 @@
-import priorityDAO from "./priority.DAO";
 import userDAO from "./user.DAO";
 import contactDAO from "./contact.DAO";
 import blockDAO from "./block.DAO";
@@ -8,7 +7,6 @@ import messageDAO from "./message.DAO";
 const DAO = {
   userDAO,
   contactDAO,
-  priorityDAO,
   blockDAO,
   groupDAO,
   messageDAO,

@@ -5,7 +5,6 @@ import loginRoute from "./authentication/login";
 import registerRoute from "./authentication/register";
 import searchRoute from "./user/search";
 import contactRoute from "./contact/contact";
-import priorityRoute from "./user/priority";
 import blokckRoute from "./user/block";
 import groupRoute from "./group/group";
 import messageRoute from "./message/message";
@@ -19,7 +18,6 @@ router.use("/register", registerRoute);
 
 // User
 router.use("/search", authMiddleware, searchRoute);
-router.use("/priority", authMiddleware, priorityRoute);
 router.use("/block", authMiddleware, blokckRoute);
 
 // Contact
