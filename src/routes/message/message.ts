@@ -15,10 +15,7 @@ messageRoute.get("/", async (req: Request, res: Response) => {
       const mainMessages: IMainMessageJSON[] = await DAO.messageDAO.getMainMessage(user.id);
       return res.status(200).json(mainMessages);
     }
-
-    return res.status(401).json({ message: "Unauthorized" });
   }
-
   return res.status(401).json({ message: "Unauthorized" });
 });
 
@@ -42,9 +39,9 @@ messageRoute.get("/invidual", async (req: Request, res: Response) => {
       return res.status(200).json(result);
     }
   }
-
   return res.status(401).json({ message: "Unauthorized" });
 });
+
 messageRoute.post("/invidual/add", async (req: Request, res: Response) => {
   if (res.locals.user_email) {
     const email = res.locals.user_email as string;
@@ -65,11 +62,9 @@ messageRoute.post("/invidual/add", async (req: Request, res: Response) => {
         const result: IMainMessageJSON | null = await DAO.messageDAO.toJSON(invidualMessages);
         return res.status(200).json(result);
       }
-
       return res.status(400).json({ message: "Error" });
     }
   }
-
   return res.status(401).json({ message: "Unauthorized" });
 });
 
@@ -92,12 +87,10 @@ messageRoute.get("/group", async (req: Request, res: Response) => {
       }
       return res.status(200).json(result);
     }
-
-    return res.status(401).json({ message: "Unauthorized" });
   }
-
   return res.status(401).json({ message: "Unauthorized" });
 });
+
 messageRoute.post("/group/add", async (req: Request, res: Response) => {
   if (res.locals.user_email) {
     const email = res.locals.user_email as string;
@@ -120,10 +113,7 @@ messageRoute.post("/group/add", async (req: Request, res: Response) => {
       }
       return res.status(400).json({ message: "Can not give back result" });
     }
-
-    return res.status(401).json({ message: "Unauthorized" });
   }
-
   return res.status(401).json({ message: "Unauthorized" });
 });
 

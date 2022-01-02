@@ -21,10 +21,7 @@ contactRoute.get("/", async (req: Request, res: Response) => {
       }
       return res.status(200).json(resultJSON);
     }
-
-    return res.status(401).json({ message: "Unauthorized" });
   }
-
   return res.status(401).json({ message: "Unauthorized" });
 });
 
@@ -43,7 +40,6 @@ contactRoute.post("/add", async (req: Request, res: Response) => {
       }
       return res.status(400).json({ message: "Missing id_user_contact" });
     }
-    return res.status(401).json({ message: "Unauthorized" });
   }
   return res.status(401).json({ message: "Unauthorized" });
 });
@@ -59,9 +55,8 @@ contactRoute.post("/accept", async (req: Request, res: Response) => {
       if (contactJSON) {
         return res.status(200).json(contactJSON);
       }
-      return res.status(400).json({ message: "Contact not found" });
+      return res.status(400).json({ message: "Error accepting contact: Cannot find userInfo or missing id_contact." });
     }
-    return res.status(401).json({ message: "Unauthorized" });
   }
   return res.status(401).json({ message: "Unauthorized" });
 });
@@ -77,9 +72,8 @@ contactRoute.post("/remove", async (req: Request, res: Response) => {
       if (contactJSON) {
         return res.status(200).json(contactJSON);
       }
-      return res.status(400).json({ message: "Contact not found" });
+      return res.status(400).json({ message: "Error removing contact: Cannot find userInfo or missing id_contact." });
     }
-    return res.status(401).json({ message: "Unauthorized" });
   }
 
   return res.status(401).json({ message: "Unauthorized" });
@@ -106,9 +100,8 @@ contactRoute.post("/priority", async (req: Request, res: Response) => {
         }
       }
 
-      return res.status(400).json({ message: "Contact not found" });
+      return res.status(400).json({ message: "Error change priority contact: Canot find userInfo or missing id_contact." });
     }
-    return res.status(401).json({ message: "Unauthorized" });
   }
   return res.status(401).json({ message: "Unauthorized" });
 });
