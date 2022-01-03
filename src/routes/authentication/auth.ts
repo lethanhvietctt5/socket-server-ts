@@ -8,7 +8,7 @@ const authRoute = Router();
 authRoute.post("/", async (req: Request, res: Response) => {
   const access_token: string | undefined = req.headers["x-auth-token"]?.toString();
 
-  if (typeof access_token === "undefined") {
+  if (typeof access_token === "undefined" || access_token.length === 0) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
