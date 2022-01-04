@@ -26,7 +26,6 @@ export class GroupDAO {
           result.push(groupInfo);
         }
       }
-
       return result;
     }
     return [];
@@ -49,7 +48,6 @@ export class GroupDAO {
         }) as IGroupMember;
         await groupMember.save();
       }
-
       return group;
     }
     return null;
@@ -64,8 +62,6 @@ export class GroupDAO {
         await groupMember.save();
         return groupMember;
       }
-
-      return null;
     }
     return null;
   };
@@ -89,7 +85,6 @@ export class GroupDAO {
         is_admin: true,
       });
       await groupMember.save();
-
       return group;
     }
     return null;
@@ -118,7 +113,6 @@ export class GroupDAO {
         return membersJSON;
       }
     }
-
     return null;
   };
 
@@ -128,7 +122,6 @@ export class GroupDAO {
       const user_added: IUser | null = await DAO.userDAO.getUserById(groupMember.id_user_added);
       if (user_added && group) {
         const userAddedJSON: IUserJSON | null = await DAO.userDAO.toJSON(user_added);
-
         if (userAddedJSON) {
           const result: IGroupJSON = {
             _id: group._id.valueOf().toString(),
@@ -139,15 +132,11 @@ export class GroupDAO {
             left_at: groupMember.left_at,
             user_added: userAddedJSON,
             is_admin: groupMember.is_admin,
+            is_priority: groupMember.is_priority,
           };
-
           return result;
         }
-
-        return null;
       }
-
-      return null;
     }
     return null;
   };

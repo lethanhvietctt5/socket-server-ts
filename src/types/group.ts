@@ -18,4 +18,5 @@ export interface IGroupJSON {
   left_at: Date | null;
   user_added: IUserJSON;
   is_admin: boolean;
+  is_priority: boolean;
 }

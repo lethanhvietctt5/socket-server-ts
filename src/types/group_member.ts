@@ -8,4 +8,5 @@ export default interface IGroupMember extends Document {
   left_at: Date | null;
   id_user_added: string;
   is_admin: boolean;
+  is_priority: boolean;
 }

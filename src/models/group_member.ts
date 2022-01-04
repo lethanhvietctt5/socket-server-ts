@@ -7,6 +7,7 @@ const groupMemberSchema: Schema = new Schema({
   left_at: { type: Date, default: null },
   id_user_added: { type: String, required: true },
   is_admin: { type: Boolean, default: false },
+  is_priority: { type: Boolean, default: true },
 });
 
 export default model("GroupMember", groupMemberSchema);
