@@ -1,6 +1,7 @@
 import { IUserJSON } from "../types/user";
 import IUser from "../types/user";
 import UserModel from "../models/user";
+import bcrypt from "bcrypt";
 
 export class UserDAO {
   constructor() {}
@@ -17,21 +18,25 @@ export class UserDAO {
   };
 
   public createUser = async (email: string, name: string, password: string): Promise<IUser> => {
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
     const newUser: IUser = new UserModel({
       email: email,
       name: name,
-      password: password,
+      password: hashPassword,
     });
     const result: IUser = await newUser.save();
     return result;
   };
 
   public updateUser = async (user_id: string, name: string, password: string): Promise<IUser | null> => {
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(password, salt);
     const user: IUser | null = await UserModel.findOneAndUpdate(
       { _id: user_id },
       {
         name: name,
-        password: password,
+        password: hashPassword,
       }
     );
     return user;
