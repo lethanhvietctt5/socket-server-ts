@@ -8,6 +8,7 @@ import contactRoute from "./contact/contact";
 import blokckRoute from "./user/block";
 import groupRoute from "./group/group";
 import messageRoute from "./message/message";
+import profileRoute from "./user/profile";
 
 const router = Router();
 
@@ -19,6 +20,7 @@ router.use("/register", registerRoute);
 // User
 router.use("/search", authMiddleware, searchRoute);
 router.use("/block", authMiddleware, blokckRoute);
+router.use("/info", authMiddleware, profileRoute);
 
 // Contact
 router.use("/contacts", authMiddleware, contactRoute);

@@ -26,6 +26,17 @@ export class UserDAO {
     return result;
   };
 
+  public updateUser = async (user_id: string, name: string, password: string): Promise<IUser | null> => {
+    const user: IUser | null = await UserModel.findOneAndUpdate(
+      { _id: user_id },
+      {
+        name: name,
+        password: password,
+      }
+    );
+    return user;
+  };
+
   public searchUser = async (keyword: string): Promise<IUser[]> => {
     let result: IUser[] = await UserModel.find({
       $text: { $search: keyword },
