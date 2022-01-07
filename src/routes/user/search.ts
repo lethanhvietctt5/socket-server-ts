@@ -8,7 +8,8 @@ searchRoute.post("/", async (req: Request, res: Response) => {
     const { keyword } = req.query;
     const result = await DAO.userDAO.searchUser(keyword as string);
     if (result.length > 0) {
-      return res.status(200).json(result);
+      const resJson = await Promise.all(result.map((user) => DAO.userDAO.toJSON(user)));
+      return res.status(200).json(resJson);
     }
     return res.status(404).json({ message: "No any match" });
   } catch (e) {
