@@ -24,7 +24,7 @@ class SocketServer {
   public static onlineUsers: IUserOnline[] = [];
 
   constructor() {
-    this.port = process.env.PORT || 3000;
+    this.port = process.env.PORT || 5000;
     this.server = http.createServer(expressApp.app);
     this.io = new socketio.Server(this.server, {
       cors: {
@@ -68,9 +68,13 @@ class SocketServer {
   public joinapp = (socket: any) => {
     // Khi người dùng đăng nhập thành công
     socket.on(EVENT.join_app, async (id: string) => {
-      console.log(id);
-      // Thêm user vào danh sách các user đang online
-      SocketServer.onlineUsers.push({ socketId: socket.id, userID: id });
+      const index = SocketServer.onlineUsers.findIndex((item) => item.userID === id);
+      if (index !== -1) {
+        SocketServer.onlineUsers[index].socketId = socket.id;
+      } else {
+        // Thêm user vào danh sách các user đang online
+        SocketServer.onlineUsers.push({ socketId: socket.id, userID: id });
+      }
 
       // Cập nhật danh sách user online mới và gửi đến các client khác
       this.io.emit(EVENT.list_online_user, SocketServer.onlineUsers);
@@ -113,7 +117,7 @@ class SocketServer {
         }
       } else if (params.id_group) {
         // Tạo và lưu tin nhắn vào database
-        const message: IMessageGroup | null = await DAO.messageDAO.addGroupMessage(params.id_sender, params.id_group, params.content);
+        const message: IMessageGroup | null = await DAO.messageDAO.addGroupMessage(params.id_group, params.id_sender, params.content);
         if (message) {
           const messageJSON: IMainMessageJSON | null = await DAO.messageDAO.toJSON(message);
           if (messageJSON) {
