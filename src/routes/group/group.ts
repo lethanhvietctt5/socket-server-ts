@@ -120,4 +120,22 @@ groupRoute.get("/members", async (req: Request, res: Response) => {
   return res.status(401).json({ message: "Unauthorized" });
 });
 
+groupRoute.post("/changePriority", async (req: Request, res: Response) => {
+  if (res.locals.user_email) {
+    const email = res.locals.user_email as string;
+    const user: IUser | null = await DAO.userDAO.getUserByEmail(email);
+    const id_group = req.body.id_group as string;
+    const group = await DAO.groupDAO.getGroupById(id_group);
+    if (user && group) {
+      const groupMember = await DAO.groupDAO.changePriority(user.id, group.id);
+      const groupMemberJSON = await DAO.groupDAO.toJSON(groupMember);
+      if (groupMemberJSON) {
+        return res.status(200).json(groupMemberJSON);
+      }
+    }
+    return res.status(400).json({ message: "Can not get group" });
+  }
+  return res.status(401).json({ message: "Unauthorized" });
+});
+
 export default groupRoute;

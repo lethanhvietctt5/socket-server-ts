@@ -116,6 +116,16 @@ export class GroupDAO {
     return null;
   };
 
+  public changePriority = async (id_user: string, id_group: string): Promise<IGroupMember | null> => {
+    const groupMember: IGroupMember | null = await GroupMemberModel.findOne({ id_group, id_member: id_user });
+    if (groupMember) {
+      groupMember.is_priority = !groupMember.is_priority;
+      await groupMember.save();
+      return groupMember;
+    }
+    return null;
+  };
+
   public toJSON = async (groupMember: IGroupMember | null): Promise<IGroupJSON | null> => {
     if (groupMember) {
       const group: IGroup | null = await GroupModel.findById(groupMember.id_group);

@@ -134,7 +134,7 @@ class SocketServer {
       const new_member = await DAO.userDAO.getUserById(params.id_new_member);
       if (sender && group && new_member) {
         // Tạo tin nhắn nhóm với nội dung thông báo có người mới được thêm vào group
-        const content: string = `${sender} has add ${new_member.name} to group.`;
+        const content: string = `${sender.name} has add ${new_member.name} to group.`;
         const message: IMessageGroup | null = await DAO.messageDAO.addGroupMessage(group.id, sender.id, content, "text", true);
         const groupAdded: IGroup | null = await DAO.groupDAO.addNewMember(params.id_new_member, params.id_group, params.id_user_added);
 
