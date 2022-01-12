@@ -84,9 +84,16 @@ export class MessageDAO {
 
     for (const id_contact of list_disticnt_id) {
       const message = await MessageModel.find({
-        $or: [{ id_sender: id_contact }, { id_receiver: id_contact }],
+        $or: [
+          {
+            $and: [{ id_sender: id_user }, { id_receiver: id_contact }],
+          },
+          {
+            $and: [{ id_sender: id_contact }, { id_receiver: id_user }],
+          },
+        ],
       })
-        .sort({ datetime: -1 })
+        .sort({ _id: -1 })
         .limit(1);
 
       allMessages.push(...message);
@@ -96,7 +103,7 @@ export class MessageDAO {
     const allGroupMessages: IMessageGroup[] = [];
 
     for (let group of allGroups) {
-      const messages = await MessageGroupModel.find({ id_group: group._id }).sort({ datetime: -1 }).limit(1);
+      const messages = await MessageGroupModel.find({ id_group: group._id }).sort({ _id: -1 }).limit(1);
 
       allGroupMessages.push(...messages);
     }
