@@ -108,7 +108,7 @@ export class MessageDAO {
       allGroupMessages.push(...messages);
     }
 
-    const result: IMainMessageJSON[] = [];
+    let result: IMainMessageJSON[] = [];
 
     for (let message of allMessages) {
       const sender = await DAO.userDAO.getUserById(message.id_sender);
@@ -130,6 +130,8 @@ export class MessageDAO {
 
       result.push(singeMessage);
     }
+
+    result = result.sort((a, b) => b.sent_at.getTime() - a.sent_at.getTime());
 
     for (let message of allGroupMessages) {
       const group = (await DAO.groupDAO.getGroupById(message.id_group)) as IGroup;
