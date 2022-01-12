@@ -60,6 +60,7 @@ export class ContactDAO {
     let contact: IContact | null = await this.getContactById(id_contact);
     if (contact && contact.id_user_requested_to.valueOf().toString() === id_user) {
       contact.is_accepted = true;
+      contact.is_priority = true;
       const result = await contact.save();
       return result;
     }

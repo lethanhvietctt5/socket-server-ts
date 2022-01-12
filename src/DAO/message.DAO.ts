@@ -74,38 +74,22 @@ export class MessageDAO {
   public getMainMessage = async (id_user: string): Promise<IMainMessageJSON[]> => {
     const allContacts = await DAO.contactDAO.getAllContacts(id_user);
     const allMessages: IMessage[] = [];
-    for (let contact of allContacts) {
-      if (contact.id_user_requested.valueOf().toString() === id_user) {
-        const messages = await MessageModel.find({
-          $or: [
-            {
-              $and: [{ id_sender: id_user }, { id_receiver: contact.id_user_requested_to }],
-            },
-            {
-              $and: [{ id_sender: contact.id_user_requested_to }, { id_receiver: id_user }],
-            },
-          ],
-        });
-        // .sort({ datetime: -1 })
-        // .limit(1);
+    let list_disticnt_id: string[] = [];
 
-        allMessages.push(...messages);
-      } else if (contact.id_user_requested_to.valueOf().toString() === id_user) {
-        const messages = await MessageModel.find({
-          $or: [
-            {
-              $and: [{ id_sender: id_user }, { id_receiver: contact.id_user_requested }],
-            },
-            {
-              $and: [{ id_sender: contact.id_user_requested }, { id_receiver: id_user }],
-            },
-          ],
-        });
-        // .sort({ datetime: -1 })
-        // .limit(1);
+    let temp_list = await MessageModel.find({ id_sender: id_user }).distinct("id_receiver");
+    list_disticnt_id.push(...temp_list);
+    temp_list = await MessageModel.find({ id_receiver: id_user }).distinct("id_sender");
+    list_disticnt_id.push(...temp_list);
+    list_disticnt_id = Array.from(new Set(list_disticnt_id));
 
-        allMessages.push(...messages);
-      }
+    for (const id_contact of list_disticnt_id) {
+      const message = await MessageModel.find({
+        $or: [{ id_sender: id_contact }, { id_receiver: id_contact }],
+      })
+        .sort({ datetime: -1 })
+        .limit(1);
+
+      allMessages.push(...message);
     }
 
     const allGroups = await DAO.groupDAO.getAllGroups(id_user);
