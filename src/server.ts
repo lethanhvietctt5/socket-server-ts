@@ -108,11 +108,7 @@ class SocketServer {
           const messageJSON: IMainMessageJSON | null = await DAO.messageDAO.toJSON(message);
 
           if (messageJSON) {
-            // Gửi tin nhắn đến người nhận
-            const user_online = SocketServer.onlineUsers.find((user) => user.userID === params.id_receiver);
-            if (user_online) {
-              socket.to(user_online.socketId).emit(EVENT.recieve_message, messageJSON);
-            }
+            socket.to(params.id_receiver).emit(EVENT.recieve_message, messageJSON);
           }
         }
       } else if (params.id_group) {

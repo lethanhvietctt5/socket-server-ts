@@ -8,8 +8,7 @@
   "scripts": {
     "start": "node build/index.js",
     "build": "tsc",
-    "dev": "ts-node src/index.ts",
-    "postinstall": "npm run build"
+    "dev": "ts-node src/index.ts"
   },
   "dependencies": {
     "@types/bcrypt": "^5.0.0",
